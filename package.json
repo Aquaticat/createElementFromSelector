@@ -1,0 +1,29 @@
+{
+  "name": "create-element-from-selector",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "HTMLElement",
+    "selectors"
+  ],
+  "author": {
+    "name": "Aquaticat",
+    "email": "an@aquati.cat",
+    "url": "https://aquati.cat"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-monochromatic": "^0.0.5",
+    "node-html-parser": "^6.1.5",
+    "sass": "^1.59.3",
+    "vite": "^4.1.4"
+  }
+}

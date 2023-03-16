@@ -1,0 +1,86 @@
+body {
+  counter-reset: htmlElement-index;
+}
+
+body > * {
+  display: block;
+  color: black;
+  background-color: white;
+  border: 24px solid red;
+  outline: 16px solid white;
+
+  margin-inline: auto;
+  margin-block: 64px;
+
+  box-sizing: border-box;
+  inline-size: calc(100% - 256px);
+  block-size: 128px;
+  padding: 20px;
+  font-size: 16px;
+  font-family: 'JetBrains Mono', 'Inter V', monospace;
+  font-weight: bold;
+
+  counter-increment: htmlElement-index;
+
+  &::before {
+    content: counter(htmlElement-index)": ";
+  }
+}
+
+div {
+
+}
+
+#border-inline-start-color-white {
+  border-inline-start-color: white;
+
+  &::after {
+    content: '#border-inline-start-color-white';
+  }
+}
+
+.border-inline-end-color-green {
+  border-inline-end-color: green;
+
+  &::after {
+    content: '.border-inline-end-color-green';
+  }
+}
+
+[border-block-start-color] {
+  border-block-start-color: blue;
+
+  &::after {
+    content: '[border-block-start-color]';
+  }
+}
+
+[border-block-start-color="orange"] {
+  border-block-start-color: orange;
+
+  &::after {
+    content: '[border-block-start-color="orange"]';
+  }
+}
+[border-block-start-color="yellow"] {
+  border-block-start-color: yellow;
+
+  &::after {
+    content: '[border-block-start-color="yellow"]';
+  }
+}
+[border-block-start-color=purple] {
+  border-block-start-color: purple;
+
+  &::after {
+    content: '[border-block-start-color="purple"]';
+  }
+}
+
+[border-block-end-color] {
+  border-block-end-color: blue;
+
+  &::after {
+    content: '[border-block-end-color]';
+  }
+}
