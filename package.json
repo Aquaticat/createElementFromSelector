@@ -1,7 +1,7 @@
 {
-  "name": "create-element-from-selector",
+  "name": "create_element_from_selector",
   "version": "0.0.1",
-  "description": "",
+  "description": "Create an HTMLElement from CSS selectors.",
   "type": "module",
   "main": "index.js",
   "scripts": {
