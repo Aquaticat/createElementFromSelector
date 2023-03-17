@@ -35,7 +35,7 @@ import createElementFromSelector from '@aquaticat/create-element-from-selector';
 Example JavaScript code:
 
 ```js
-document.body.appendChild(createElementFromSelector('a[autofocus].many.thanks[href="https:////aquati.cat"]#Author_of_createElementFromSelector'));
+document.body.appendChild(createElementFromSelector('a[autofocus].many.thanks[href="https://aquati.cat"]#Author_of_createElementFromSelector'));
 ```
 
 Would result in expected HTML:

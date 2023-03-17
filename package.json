@@ -1,6 +1,6 @@
 {
   "name": "@aquaticat/create-element-from-selector",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Create an HTMLElement from CSS selectors.",
   "type": "module",
   "main": "index.js",
