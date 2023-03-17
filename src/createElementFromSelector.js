@@ -125,10 +125,10 @@ const potentialBuiltinElementNames = new Set([
                                              ]);
 
 // See https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
-// The last character in the last alternate group should be \u{983039}
-// However, JavaScript doesn't support a digit that large at this time.
-// Therefore, we are using \u{99999} at this time instead.
-const potentialCustomElementNameRegex = /[a-z](?:-|\.|[0-9]|_|[a-z]|\xB7|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\u0893]|[\u0895-\u8191]|[\u8204-\u8205]|[\u8255-\u8256]|[\u8304-\u8591]|[\u{11264}-\u{12271}]|[\u{12289}-\u{55295}]|[\u{63744}-\u{64975}]|[\u{65008}-\u{65533}]|[\u{65536}-\u{99999}])*-(?:-|\.|[0-9]|_|[a-z]|\xB7|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\u0893]|[\u0895-\u8191]|[\u8204-\u8205]|[\u8255-\u8256]|[\u8304-\u8591]|[\u{11264}-\u{12271}]|[\u{12289}-\u{55295}]|[\u{63744}-\u{64975}]|[\u{65008}-\u{65533}]|[\u{65536}-\u{99999}])*/u;
+//
+// Constant PCENChar Cannot be used because it's not easy to construct a new Regex based on an existing Regex. Here for reference.
+// const PCENChar = /-|\.|[0-9]|_|[a-z]|\u{b7}|[\u{c0}-\u{d6}]|[\u{d8}-\u{f6}]|[\u{f8}-\u{37d}]|[\u{37f}-\u{1FFF}]|[\u{200c}-\u{200d}]|[\u{203f}-\u{2040}]|[\u{2070}-\u{218f}]|[\u{2c00}-\u{2fef}]|[\u{3001}-\u{d7ff}]|[\u{f900}-\u{fdcf}]|[\u{fdf0}-\u{fffd}]|[\u{10000}-\u{effff}]/u;
+const potentialCustomElementNameRegex = /[a-z](?:-|\.|[0-9]|_|[a-z]|\u{b7}|[\u{c0}-\u{d6}]|[\u{d8}-\u{f6}]|[\u{f8}-\u{37d}]|[\u{37f}-\u{1FFF}]|[\u{200c}-\u{200d}]|[\u{203f}-\u{2040}]|[\u{2070}-\u{218f}]|[\u{2c00}-\u{2fef}]|[\u{3001}-\u{d7ff}]|[\u{f900}-\u{fdcf}]|[\u{fdf0}-\u{fffd}]|[\u{10000}-\u{effff}])*?-(?:-|\.|[0-9]|_|[a-z]|\u{b7}|[\u{c0}-\u{d6}]|[\u{d8}-\u{f6}]|[\u{f8}-\u{37d}]|[\u{37f}-\u{1FFF}]|[\u{200c}-\u{200d}]|[\u{203f}-\u{2040}]|[\u{2070}-\u{218f}]|[\u{2c00}-\u{2fef}]|[\u{3001}-\u{d7ff}]|[\u{f900}-\u{fdcf}]|[\u{fdf0}-\u{fffd}]|[\u{10000}-\u{effff}])*/u;
 
 const prohibitedElementNames = new Set([
                                          'annotation-xml',
