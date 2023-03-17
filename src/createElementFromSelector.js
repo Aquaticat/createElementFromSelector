@@ -142,16 +142,39 @@ const prohibitedElementNames = new Set([
                                        ]);
 
 
-const splitOnceWithRemain = (inputString, separator, separatorLength = 0) => {
-  // Assume separator's length is zero. (By using Regex lookaround.)
+const splitOnceWithRemain = (inputString, separator) => {
+  const indexOfSeparatorSearch = inputString.search(separator);
 
-  const indexOfSeparator = (inputString.split(separator, 2)[0]).length;
-  console.log(indexOfSeparator);
+  if (indexOfSeparatorSearch === -1) {
+    return [inputString, ''];
+  }
 
-  return [inputString.slice(0, indexOfSeparator), inputString.slice(indexOfSeparator + separatorLength)];
-};
+  if (indexOfSeparatorSearch === 0) {
+    const inputStringWithoutStartingSeparator = inputString.replace(separator, '');
+    const indexOfSecondSeparator = inputStringWithoutStartingSeparator.search(separator);
+
+    if (indexOfSecondSeparator === -1) {
+      return [inputString, ''];
+    }
+
+    const startingSeparatorLength = inputString.length - inputStringWithoutStartingSeparator.length;
+
+    console.log(6, indexOfSeparatorSearch, inputStringWithoutStartingSeparator, indexOfSecondSeparator, startingSeparatorLength);
+
+    return [inputString.slice(0, indexOfSecondSeparator + startingSeparatorLength), inputString.slice(indexOfSecondSeparator + startingSeparatorLength)];
+  }
+
+  return [inputString.slice(0, indexOfSeparatorSearch), inputString.slice(indexOfSeparatorSearch)];
+}
 
 const processOtherSelectors = (htmlElement, otherSelectors) => {
+  // See https://stackoverflow.com/a/31773673
+  otherSelectors.trim() === otherSelectors || (() => {
+    throw new SyntaxError(
+      `Invalid CSS selectors for creating one element.
+Please ensure there is no space between the selectors.`);
+  })();
+
   if (!otherSelectors) {
     return htmlElement;
   }
@@ -161,10 +184,10 @@ const processOtherSelectors = (htmlElement, otherSelectors) => {
 Please ensure there is no space between the selectors.`);
   })();
 
-  const [currentSelector, nextSelectors] = splitOnceWithRemain(otherSelectors, /(?=[#\[.])/);
+  const [currentSelector, nextSelectors] = splitOnceWithRemain(otherSelectors, /\[.+?(?<!\\(?:\\\\)*)]|\.|#/);
 
   console.log('1', otherSelectors);
-  console.log('2', currentSelector, nextSelectors);
+  console.log('2', currentSelector,'and', nextSelectors);
 
   currentSelector.slice(1) || (() => {
     throw new SyntaxError(`Invalid CSS selectors for creating one element.
@@ -214,17 +237,17 @@ Please ensure all selectors are not empty.`);
       //region Refactor this part. Try not to write two separate duplicate statements for checking quotes.
       let quote = '"';
 
-      let [attributeName, attributeValueAndQuote] = splitOnceWithRemain(currentSelectorName, `=${quote}`, 2);
-      console.log(4, currentSelectorName, attributeName, attributeValueAndQuote);
+      let [attributeName, separatorAndAttributeValueAndQuote] = splitOnceWithRemain(currentSelectorName, `=${quote}`);
+      console.log(4, currentSelectorName, attributeName, separatorAndAttributeValueAndQuote);
 
       let returnValue;
-      (attributeName && attributeValueAndQuote) || (() => {
+      (attributeName && separatorAndAttributeValueAndQuote.slice(2)) || (() => {
         quote = '\'';
 
-        [attributeName, attributeValueAndQuote] = splitOnceWithRemain(currentSelectorName, `=${quote}`, 2);
-      console.log(4.2, currentSelectorName, attributeName, attributeValueAndQuote);
+        [attributeName, separatorAndAttributeValueAndQuote] = splitOnceWithRemain(currentSelectorName, `=${quote}`);
+      console.log(4.2, currentSelectorName, attributeName, separatorAndAttributeValueAndQuote);
 
-        (attributeName && attributeValueAndQuote) || (() => {
+        (attributeName && separatorAndAttributeValueAndQuote.slice(2)) || (() => {
           currentSelectorName.match(/(?<!\\\\)(?:\\\\\\\\)*['"=\s]/) && (() =>{  throw new SyntaxError(`Invalid CSS selectors for creating one element.
       Please ensure the attribute selector "${currentSelector}" is valid.`);})();
 
@@ -241,29 +264,29 @@ Please ensure all selectors are not empty.`);
       if (returnValue) return returnValue;
       //endregion
 
-      console.log(5, currentSelectorName, attributeName, attributeValueAndQuote);
+      console.log(5, currentSelectorName, attributeName, separatorAndAttributeValueAndQuote);
 
       ['~', '|', '^', '$', '*'].some((qualifier) => attributeName.endsWith(qualifier)) && (() => {
         throw new SyntaxError(`Invalid CSS selectors for creating one element.
       Matching attribute value with modifiers is not supported.`);
       })();
 
-      attributeValueAndQuote.slice(-1) === quote || (() => {
+      separatorAndAttributeValueAndQuote.slice(-1) === quote || (() => {
         throw new SyntaxError(`Invalid CSS selectors for creating one element.
-        Potentially non-matching quotes of starting quote "${quote}" and ending quote "${attributeValueAndQuote.slice(-1)}".
+        Potentially non-matching quotes of starting quote "${quote}" and ending quote "${separatorAndAttributeValueAndQuote.slice(-1)}".
         Please ensure the attribute selector "${currentSelector}" is valid.`);
       })();
 
-      const attributeValue = attributeValueAndQuote.slice(0, -1);
+      const attributeValue = separatorAndAttributeValueAndQuote.slice(2, -1);
 
       attributeValue === attributeValue.trim() || (() => {
         throw new SyntaxError(`Invalid CSS selectors for creating one element.
-          Please ensure the attribute value "${attributeValue} does not have whitespace characters around it.`);
+          Please ensure the attribute value "${attributeValue}" does not have whitespace characters around it.`);
       })();
 
       attributeValue.match(new RegExp(`(?<!\\\\)(?:\\\\\\\\)*${quote}`)) && (() => {
         throw new SyntaxError(`Invalid CSS selectors for creating one element.
-          Please ensure the attribute value "${attributeValue} does not have unescaped quotes.`);
+          Please ensure the attribute value "${attributeValue}" does not have unescaped quotes.`);
       })();
 
       htmlElement.hasAttribute(attributeName) && (() => {
@@ -287,15 +310,8 @@ Please ensure all selectors are not empty.`);
 const createElementFromSelector = (selectors) => {
   console.log(selectors);
 
-  const [tagName, otherSelectors] = splitOnceWithRemain(selectors, /(?=[#\[.])/);
+  const [tagName, otherSelectors] = splitOnceWithRemain(selectors, /[#\[.]/);
   console.log(0, tagName, otherSelectors);
-
-  // See https://stackoverflow.com/a/31773673
-  otherSelectors?.match(/\s/) && (() => {
-    throw new SyntaxError(
-      `Invalid CSS selectors for creating one element.
-Please ensure there is no space between the selectors.`);
-  })();
 
   (
     (

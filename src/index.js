@@ -30,6 +30,9 @@ const cESABCatch = ((selectors) => {
   'div[border-block-end-color][border-block-start-color="purple"]',
   'div[border-block-end-color][border-block-start-color="purple"].border-inline-end-color-green#border-inline-start-color-white',
   'my-element[border-block-end-color][border-block-start-color="yellow"].border-inline-end-color-green#border-inline-start-color-white',
+
+  // FIXedME: Failing the # inside attribute value test.
+  'a#a[href="#a"]',
 ].forEach((selectors) => {
   cESAB(selectors);
 });

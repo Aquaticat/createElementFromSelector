@@ -1,3 +1,8 @@
+:root {
+  --rmp: calc(1rem / 16);
+  --crmp: clamp(1px, var(--rmp), 2px);
+}
+
 body {
   counter-reset: htmlElement-index;
 }
@@ -6,17 +11,16 @@ body > * {
   display: block;
   color: black;
   background-color: white;
-  border: 24px solid red;
-  outline: 16px solid white;
+  border: calc(24 * var(--crmp)) solid red;
+  outline: calc(16 * var(--crmp)) solid white;
 
   margin-inline: auto;
-  margin-block: 64px;
+  margin-block: calc(64 * var(--crmp));
 
   box-sizing: border-box;
-  inline-size: calc(100% - 256px);
-  block-size: 128px;
-  padding: 20px;
-  font-size: 16px;
+  inline-size: calc(100% - 256 * var(--crmp));
+  block-size: calc(128 * var(--crmp));
+  padding: calc(20 * var(--crmp));
   font-family: 'JetBrains Mono', 'Inter V', monospace;
   font-weight: bold;
 
@@ -82,5 +86,11 @@ div {
 
   &::after {
     content: '[border-block-end-color]';
+  }
+}
+
+[href="#a"] {
+  &::after {
+    content: '[href="#a"]';
   }
 }
